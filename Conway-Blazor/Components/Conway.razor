@@ -1,16 +1,15 @@
 ﻿
 <table>
     <tbody>
-        @for (var rowIndex = 0; rowIndex < Grid.Length; rowIndex++)
+        @for (var row = 0; row < Grid.Length; row++)
         {
             <tr>
-                @for (var columnIndex = 0; columnIndex < Grid[rowIndex].Length; columnIndex++)
+                @for (var column = 0; column < Grid[row].Length; column++)
                 {
-                    var backgroundColor = Grid[rowIndex][columnIndex] ? "grey" : "white";
+                    var (y, x) = (row, column);
 
-                    var (x, y) = (rowIndex, columnIndex);
-
-                    <td @onclick="() => OnCellClick(x, y)" style="background-color: @backgroundColor"></td>
+                    <td class=@(Grid[y][x] ? "alive" : "")
+                        @onclick="() => OnCellClick(y, x)"></td>
                 }
             </tr>
         }
@@ -19,13 +18,16 @@
 
 @code
 {
+    [Parameter]
+    public bool[][] InitialGrid { get; set; }
+
     protected override void OnInitialized()
     {
         Grid = InitialGrid;
     }
 
-    private bool[][] Grid { get; set; }
+    private void OnCellClick(int row, int column) =>
+        Grid[row][column] = !Grid[row][column];
 
-    [Parameter]
-    public bool[][] InitialGrid { get; set; }
+    private bool[][] Grid { get; set; }
 }
