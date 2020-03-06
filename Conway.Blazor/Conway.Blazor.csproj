@@ -5,4 +5,8 @@
     <RootNamespace>Conway.Blazor</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Conway.Core\Conway.Core.csproj" />
+  </ItemGroup>
+
 </Project>
