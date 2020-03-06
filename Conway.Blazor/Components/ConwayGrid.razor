@@ -1,4 +1,8 @@
 ﻿
+@using System.Timers
+
+@using Conway.Core
+
 <table>
     <tbody>
         @for (var row = 0; row < Grid.Length; row++)
@@ -16,18 +20,46 @@
     </tbody>
 </table>
 
+<button @onclick="@NextState">Next</button>
+
+<button @onclick="@OnPlayClick">@(timer.Enabled ? "Pause" : "Play")</button>
+
 @code
 {
     [Parameter]
     public bool[][] InitialGrid { get; set; }
 
+    [Parameter]
+    public int UpdateFrequency { get; set; }
+
     protected override void OnInitialized()
     {
         Grid = InitialGrid;
+
+        timer = new Timer(UpdateFrequency);
+
+        timer.Elapsed += OnTimerElapsed;
+
+        timer.AutoReset = true;
+
+        timer.Enabled = false;
     }
 
     private void OnCellClick(int row, int column) =>
         Grid[row][column] = !Grid[row][column];
 
+    private void OnPlayClick() => timer.Enabled = !timer.Enabled;
+
+    private async void OnTimerElapsed(object sender, EventArgs args)
+    {
+        NextState();
+
+        await InvokeAsync(() => StateHasChanged());
+    }
+
+    private void NextState() => Grid = (bool[][]) Conway.NextState(Grid);
+
     private bool[][] Grid { get; set; }
+
+    private Timer timer;
 }

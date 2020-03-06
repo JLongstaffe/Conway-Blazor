@@ -1,5 +1,7 @@
 ﻿
-<Conway.Blazor.Components.Conway InitialGrid="RandomGrid(50)" />
+@using Conway.Blazor.Components
+
+<ConwayGrid InitialGrid="RandomGrid(50)" UpdateFrequency="500" />
 
 @code
 {
