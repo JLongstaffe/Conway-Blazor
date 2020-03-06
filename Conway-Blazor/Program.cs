@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace ConwayBlazor
+namespace Conway.Blazor
 {
     public class Program
     {

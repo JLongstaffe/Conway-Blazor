@@ -1,7 +1,7 @@
 ﻿
 @page
 
-@using ConwayBlazor.Components;
+@using Conway.Blazor
 
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
@@ -10,6 +10,6 @@
     <title>Conway-Blazor</title>
 </head>
 <body>
-    <component type="typeof(Conway)" render-mode="ServerPrerendered" />
+    <component type="typeof(App)" render-mode="ServerPrerendered" />
 </body>
 </html>

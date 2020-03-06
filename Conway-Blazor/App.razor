@@ -1,0 +1,16 @@
+﻿
+<Conway.Blazor.Components.Conway InitialGrid="RandomGrid(50)" />
+
+@code
+{
+    private static bool[][] RandomGrid(int size)
+    {
+        Func<bool> randomBool = () => new Random().Next(0, 2) == 1;
+
+        return Enumerable.Range(0, size)
+                         .Select(_ => Enumerable.Range(0, size)
+                                                .Select(_ => randomBool())
+                                                .ToArray())
+                         .ToArray();
+    }
+}

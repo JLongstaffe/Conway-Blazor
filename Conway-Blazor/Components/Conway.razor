@@ -1,5 +1,43 @@
-﻿<h3>Conway</h3>
+﻿
+<style>
+    table {
+        height: 800px;
+        width: 800px;
+        border-collapse: collapse;
+    }
 
-@code {
+    td {
+        border: 1px solid black;
+    }
+</style>
 
+<table>
+    <tbody>
+        @for (var rowIndex = 0; rowIndex < Grid.Length; rowIndex++)
+        {
+            <tr>
+                @for (var columnIndex = 0; columnIndex < Grid[rowIndex].Length; columnIndex++)
+                {
+                    var backgroundColor = Grid[rowIndex][columnIndex] ? "grey" : "white";
+
+                    var (x, y) = (rowIndex, columnIndex);
+
+                    <td @onclick="() => OnCellClick(x, y)" style="background-color: @backgroundColor"></td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code
+{
+    protected override void OnInitialized()
+    {
+        Grid = InitialGrid;
+    }
+
+    private bool[][] Grid { get; set; }
+
+    [Parameter]
+    public bool[][] InitialGrid { get; set; }
 }
