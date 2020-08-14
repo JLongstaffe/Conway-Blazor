@@ -5,14 +5,14 @@
 
 <table>
     <tbody>
-        @for (var row = 0; row < Grid.Length; row++)
+        @for (var row = 0; row < Grid.GetLength(0); row++)
         {
             <tr>
-                @for (var column = 0; column < Grid[row].Length; column++)
+                @for (var column = 0; column < Grid.GetLength(1); column++)
                 {
-                    var (y, x) = (row, column);
+                    var (x, y) = (row, column);
 
-                    <td class=@(Grid[y][x] ? "alive" : "")
+                    <td class=@(Grid[x, y] ? "alive" : "")
                         @onclick="() => OnCellClick(y, x)"></td>
                 }
             </tr>
@@ -22,12 +22,12 @@
 
 <button @onclick="@NextState">Next</button>
 
-<button @onclick="@OnPlayClick">@(timer.Enabled ? "Pause" : "Play")</button>
+<button @onclick="@OnPlayClick">@(playing ? "Pause" : "Play")</button>
 
 @code
 {
     [Parameter]
-    public bool[][] InitialGrid { get; set; }
+    public bool[,] InitialGrid { get; set; }
 
     [Parameter]
     public int UpdateFrequency { get; set; }
@@ -36,30 +36,46 @@
     {
         Grid = InitialGrid;
 
+        ConwayPerformance = new ConwayPerformance(Grid.Length, Grid.Length);
+
         timer = new Timer(UpdateFrequency);
 
         timer.Elapsed += OnTimerElapsed;
 
-        timer.AutoReset = true;
+        timer.AutoReset = false;
 
         timer.Enabled = false;
     }
 
-    private void OnCellClick(int row, int column) =>
-        Grid[row][column] = !Grid[row][column];
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (playing) timer.Start();
 
-    private void OnPlayClick() => timer.Enabled = !timer.Enabled;
+        base.OnAfterRender(firstRender);
+    }
+
+    private void OnCellClick(int row, int column) =>
+        Grid[row, column] = !Grid[row, column];
+
+    private void OnPlayClick() => playing = !playing;
 
     private async void OnTimerElapsed(object sender, EventArgs args)
     {
-        NextState();
+        await InvokeAsync(() =>
+        {
+            NextState();
 
-        await InvokeAsync(() => StateHasChanged());
+            StateHasChanged();
+        });
     }
 
-    private void NextState() => Grid = (bool[][]) Conway.NextState(Grid);
+    private void NextState() => ConwayPerformance.NextState(Grid);
 
-    private bool[][] Grid { get; set; }
+    private bool[,] Grid { get; set; }
+
+    private bool playing = false;
+
+    private ConwayPerformance ConwayPerformance;
 
     private Timer timer;
 }

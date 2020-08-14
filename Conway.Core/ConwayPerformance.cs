@@ -1,55 +1,65 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-using static System.Linq.Enumerable;
-
-using ReadOnly2DBool = System.Collections.Generic.IReadOnlyList
-    <System.Collections.Generic.IReadOnlyList<bool>>;
-
+﻿
 namespace Conway.Core
 {
-    public static class ConwayPerformance
+    public class ConwayPerformance
     {
-        public static ReadOnly2DBool NextState(ReadOnly2DBool state)
+        public ConwayPerformance(int maxRows, int maxColumns)
         {
-            return state.Select
-                ((row, y) => row.Select
-                    ((column, x) => NextAlive(state, x, y)))
-                .To2DArray();
+            _temporaryGrid = new bool[maxRows, maxColumns];
         }
 
-        private static bool NextAlive(ReadOnly2DBool state, int x, int y)
+        public void NextState(bool[,] state)
         {
-            var isAlive = state[y][x];
+            for (var i = 0; i < state.GetLength(0); i++)
+            for (var j = 0; j < state.GetLength(1); j++)
+            {
+                _temporaryGrid[i, j] = NextAlive(state, i, j);
+            }
+
+            for (var i = 0; i < state.GetLength(0); i++)
+            for (var j = 0; j < state.GetLength(1); j++)
+            {
+                state[i, j] = _temporaryGrid[i, j];
+            }
+        }
+
+        private static bool NextAlive(bool[,] state, int x, int y)
+        {
+            var isAlive = state[x, y];
 
             var neighbours = CountNeighbours(state, x, y);
 
-            return (isAlive && new [] { 2, 3 }.Contains(neighbours))
-                   || (!isAlive && neighbours == 3);
+            return (isAlive && (neighbours == 2 || neighbours == 3))
+                || (!isAlive && neighbours == 3);
         }
 
-        private static int CountNeighbours(ReadOnly2DBool state, int column, int row)
+        private static int CountNeighbours(bool[,] state, int row, int column)
         {
-            bool InBounds(int x, int  y) => (y >= 0 && y < state.Count)
-                                            && (x >= 0 && x < state[y].Count);
+            var count = 0;
 
-            bool IsAlive(int x, int y) => InBounds(x, y) && state[y][x];
+            for (var i = -1; i < 2; i++)
+            for (var j = -1; j < 2; j++)
+            {
+                if (i == 0 && j == 0) continue;
 
-            return Range(column - 1, 3)
-                .Cartesian(Range(row - 1, 3))
-                .Where(p => p != (column, row))
-                .Count(p => IsAlive(p.x, p.y));
+                if (IsAlive(state, row - i, column - j)) count++;
+            }
+
+            return count;
         }
 
-        private static IEnumerable<(T x, T y)> Cartesian<T>
-            (this IEnumerable<T> e1, IEnumerable<T> e2)
+        private static bool IsAlive(bool[,] state, int x, int y)
         {
-            return e1.SelectMany(x => e2.Select(y => (x, y)));
+            return InBounds(state, x, y) && state[x, y];
         }
 
-        private static T[][] To2DArray<T>(this IEnumerable<IEnumerable<T>> e)
+        private static bool InBounds(bool[,] state, int x, int y)
         {
-            return e.Select(a => a.ToArray()).ToArray();
+            return x >= 0
+                && x < state.GetLength(0)
+                && y >= 0 && y < state.GetLength(1);
         }
+
+        private readonly bool[,] _temporaryGrid;
     }
 }

@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Conway.Core", "Conway.Core\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Conway.Core.Tests.Unit", "Conway.Core.Tests.Unit\Conway.Core.Tests.Unit.csproj", "{A7B1A7D4-3399-4AFD-8407-F449752E27DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conway.Benchmarks", "Conway.Benchmarks\Conway.Benchmarks.csproj", "{77307151-E4FF-4E04-BEE6-7BB1AE2B7404}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Conway.Benchmarks", "Conway.Benchmarks\Conway.Benchmarks.csproj", "{77307151-E4FF-4E04-BEE6-7BB1AE2B7404}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conway.Profiling", "Conway.Profiling\Conway.Profiling.csproj", "{7C1497C5-68AC-4932-91D0-5ADC1695FCC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{77307151-E4FF-4E04-BEE6-7BB1AE2B7404}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77307151-E4FF-4E04-BEE6-7BB1AE2B7404}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77307151-E4FF-4E04-BEE6-7BB1AE2B7404}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C1497C5-68AC-4932-91D0-5ADC1695FCC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C1497C5-68AC-4932-91D0-5ADC1695FCC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C1497C5-68AC-4932-91D0-5ADC1695FCC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C1497C5-68AC-4932-91D0-5ADC1695FCC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

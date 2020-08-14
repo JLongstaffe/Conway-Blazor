@@ -1,18 +1,22 @@
 ﻿
 @using Conway.Blazor.Components
 
-<ConwayGrid InitialGrid="RandomGrid(50)" UpdateFrequency="500" />
+<ConwayGrid InitialGrid="RandomGrid(100)" UpdateFrequency="1" />
 
 @code
 {
-    private static bool[][] RandomGrid(int size)
+    private static bool[,] RandomGrid(int size)
     {
-        Func<bool> randomBool = () => new Random().Next(0, 2) == 1;
+        static bool RandomBool() => new Random().Next(0, 2) == 1;
 
-        return Enumerable.Range(0, size)
-                         .Select(_ => Enumerable.Range(0, size)
-                                                .Select(_ => randomBool())
-                                                .ToArray())
-                         .ToArray();
+        var grid = new bool[size, size];
+
+        for (var i = 0; i < grid.GetLength(0); i++)
+        for (var j = 0; j < grid.GetLength(1); j++)
+        {
+            grid[i, j] = RandomBool();
+        }
+
+        return grid;
     }
 }
